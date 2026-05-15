@@ -8,19 +8,11 @@ import { notFoundMiddleware } from './middlewares/not-found.middleware';
 
 export const app = express();
 
-const allowedOrigins = env.ALLOWED_ORIGINS.split(',').map((o) => o.trim());
-
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error(`CORS: origin ${origin} not allowed`));
-      }
-    },
+    origin: env.ALLOWED_ORIGINS.split(',').map((o) => o.trim()),
     credentials: true,
-  })
+  }),
 );
 app.use(helmet());
 app.use(express.json());
