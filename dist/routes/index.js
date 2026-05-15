@@ -1,0 +1,28 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const auth_route_1 = __importDefault(require("./auth.route"));
+const user_route_1 = __importDefault(require("./user.route"));
+const merchant_route_1 = __importDefault(require("./merchant.route"));
+const service_route_1 = __importDefault(require("./service.route"));
+const order_route_1 = __importDefault(require("./order.route"));
+const payment_route_1 = __importDefault(require("./payment.route"));
+const review_route_1 = __importDefault(require("./review.route"));
+const report_route_1 = __importDefault(require("./report.route"));
+const application_route_1 = __importDefault(require("./application.route"));
+const upload_route_1 = __importDefault(require("./upload.route"));
+const express_1 = require("express");
+const router = (0, express_1.Router)();
+router.use('/auth', auth_route_1.default);
+router.use('/users', user_route_1.default);
+router.use('/merchants', merchant_route_1.default);
+router.use('/services', service_route_1.default);
+router.use('/orders', order_route_1.default);
+router.use('/payments', payment_route_1.default);
+router.use('/reviews', review_route_1.default);
+router.use('/reports', report_route_1.default);
+router.use('/applications', application_route_1.default);
+router.use('/upload', upload_route_1.default);
+exports.default = router;
