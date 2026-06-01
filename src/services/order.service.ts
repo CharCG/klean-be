@@ -3,6 +3,7 @@ import { BadRequestError, ForbiddenError, NotFoundError } from '../utils/error.u
 import { CreateOrderDto, UpdateEtaDto, UpdateOrderStatusDto } from '../schemas/order.schema';
 import { OrderStatus } from '../generated/prisma/client';
 import { createSnapTransaction } from '../config/midtrans.config';
+import { env } from '../config/env.config';
 
 const STATUS_PROGRESSION: Partial<Record<OrderStatus, OrderStatus>> = {
   PROCESSING: 'FINISHED',
@@ -79,6 +80,8 @@ export const createOrder = async (userId: string, dto: CreateOrderDto) => {
     return { order: newOrder, payment };
   });
 
+  const finishUrl = `${env.FRONTEND_URL}/payment/finish?order_id=${order.order.id}`;
+
   const snapResult = await createSnapTransaction({
     transaction_details: {
       order_id: order.order.id,
@@ -101,15 +104,20 @@ export const createOrder = async (userId: string, dto: CreateOrderDto) => {
       }),
       ...(deliveryFee > 0
         ? [
-            {
-              id: 'DELIVERY_FEE',
-              price: deliveryFee,
-              quantity: 1,
-              name: 'Delivery Fee',
-            },
-          ]
+          {
+            id: 'DELIVERY_FEE',
+            price: deliveryFee,
+            quantity: 1,
+            name: 'Delivery Fee',
+          },
+        ]
         : []),
     ],
+    callbacks: {
+      finish: finishUrl,
+      unfinish: finishUrl,
+      error: finishUrl,
+    },
   });
 
   const updatedPayment = await prisma.payment.update({

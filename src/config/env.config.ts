@@ -13,6 +13,7 @@ export const env = {
   PORT: process.env.PORT || 3000,
   DATABASE_URL: requireEnv('DATABASE_URL'),
   JWT_SECRET: requireEnv('JWT_SECRET'),
+  FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:5173',
   ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS || 'http://localhost:5173',
   MIDTRANS_SERVER_KEY: requireEnv('MIDTRANS_SERVER_KEY'),
   MIDTRANS_CLIENT_KEY: requireEnv('MIDTRANS_CLIENT_KEY'),
